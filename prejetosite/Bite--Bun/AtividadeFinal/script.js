@@ -45,29 +45,26 @@
 
 
 
+const URL_API = "https://bite-bun.onrender.com";
+
 async function carregarCardapio() {
-    const resposta = await fetch("http://localhost:3000/cardapio")
-    const dados = await resposta.json()
+    const resposta = await fetch(`${URL_API}/cardapio`);
+    const dados = await resposta.json();
     console.log(dados);
-
-    popularSelect("pao",dados.filter((item => item.categoria === "pao")))
-    popularSelect("recheio",dados.filter((item => item.categoria === "recheio")))
-    popularSelect("molho",dados.filter((item => item.categoria === "molho")))
-
+    popularSelect("pao", dados.filter((item => item.categoria === "pao")))
+    popularSelect("recheio", dados.filter((item => item.categoria === "recheio")))
+    popularSelect("molho", dados.filter((item => item.categoria === "molho")))
 }
 carregarCardapio();
 
-const URL_API = "http://localhost:3000";
 const botaoCalcular = document.querySelector("#calcular");
 const resultado = document.querySelector("#resultado");
-
 botaoCalcular.addEventListener("click", async () => {
     const pedido = {
         pao: document.querySelector("#pao").value,
         recheio: document.querySelector("#recheio").value,
         molho: document.querySelector("#molho").value
     };
-
     try {
         const resposta = await fetch(`${URL_API}/pedido`, {
             method: "POST",
@@ -75,7 +72,6 @@ botaoCalcular.addEventListener("click", async () => {
             body: JSON.stringify(pedido)
         });
         const dados = await resposta.json();
-
         resultado.textContent = dados.erro
             ? dados.erro
             : `Total: R$ ${dados.total.toFixed(2)}`;
@@ -87,8 +83,8 @@ botaoCalcular.addEventListener("click", async () => {
 
 function popularSelect(idSelect, itens){
     const select = document.querySelector(`#${idSelect}`)
-    for( let i = 0; i < itens.length; i++) {
-        const item = itens [i]
+    for (let i = 0; i < itens.length; i++) {
+        const item = itens[i]
         const option = document.createElement("option")
         option.value = item.nome
         option.textContent = `${item.nome} - R$${(item.preco).toFixed(2)}`
